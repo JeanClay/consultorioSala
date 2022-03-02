@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: consultorio-postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: consultorio
+      POSTGRES_USERNAME: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "6432:5432"
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+
+  pgadmin:
+    container_name: consultorio-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@consultorio.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "5055:80"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
